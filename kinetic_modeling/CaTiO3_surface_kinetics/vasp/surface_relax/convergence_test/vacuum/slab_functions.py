@@ -1,5 +1,6 @@
 import numpy as np
 from pymatgen.core.surface import SlabGenerator
+from pymatgen.io.vasp.outputs import Oszicar, Outcar, Vasprun, Poscar
 
 def match_slabs(slabs):
     """
@@ -108,7 +109,8 @@ def vac_converge(contcar, miller_index, max_vacuum_size):
         for vac_size in value:
             if vac_size.lattice.c != c_param:
                 c_param = vac_size.lattice.c
-                vac_size.to(filename=f"{miller_index[0]}{miller_index[1]}{miller_index[2]}_{key}_term_vac_{vac_size.lattice.c:.2f}.POSCAR")
+                vac_size = Poscar(vac_size)
+                vac_size.write_file(filename=f"{miller_index[0]}{miller_index[1]}{miller_index[2]}_{key}_term_vac.POSCAR", direct=False)
 
 
 def surface_energy(surface_area, e_slab, e_bulk, n_slab):
